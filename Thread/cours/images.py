@@ -17,4 +17,5 @@ start = time.perf_counter()
 with concurrent.futures.ThreadPoolExecutor() as executor:
     executor.map(download_image, img_urls)
 end = time.perf_counter()
+
 print(f"Tasks ended in {round(end - start, 2)} second(s)")
