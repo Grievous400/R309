@@ -1,7 +1,8 @@
 import multiprocessing
 import requests
 img_urls = [
-    'https://cdn.pixabay.com/photo/2016/01/05/17/51/maltese-1123016_960_720.jpg'
+    'https://cdn.pixabay.com/photo/2016/01/05/17/51/maltese-1123016_960_720.jpg',
+    'https://cdn.pixabay.com/photo/2016/07/15/15/55/dachshund-1519374_960_720.jpg'
 
 ]
 def download_image(img_url):
@@ -14,4 +15,6 @@ def download_image(img_url):
 
 if __name__ == '__main__':
     p1 = multiprocessing.Process(target=download_image, args=[img_urls[0]])
+    p2 = multiprocessing.Process(target=download_image, args=[img_urls[1]])
     p1.start()
+    p2.start()
