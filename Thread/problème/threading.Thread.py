@@ -19,11 +19,7 @@ def download_image(img_url):
 
 
 if __name__ == '__main__':
-
-    t1 = threading.Thread(target=download_image, args=[img_urls[0]])
-    t1.start()
-    t2 = threading.Thread(target=download_image, args=[img_urls[1]])
-
-    t2.start()
-
-    t1.join()
+    for i in range(len(img_urls)):
+        ti = threading.Thread(target=download_image, args=[img_urls[i]])
+        ti.start()
+        ti.join()

@@ -5,6 +5,8 @@ img_urls = [
     'https://cdn.pixabay.com/photo/2016/07/15/15/55/dachshund-1519374_960_720.jpg'
 
 ]
+
+
 def download_image(img_url):
     img_bytes = requests.get(img_url).content
     img_name = img_url.split('/')[9]
@@ -14,7 +16,6 @@ def download_image(img_url):
 
 
 if __name__ == '__main__':
-    p1 = multiprocessing.Process(target=download_image, args=[img_urls[0]])
-    p2 = multiprocessing.Process(target=download_image, args=[img_urls[1]])
-    p1.start()
-    p2.start()
+    for i in range(len(img_urls)):
+        pi = multiprocessing.Process(target=download_image, args=[img_urls[i]])
+        pi.start()
