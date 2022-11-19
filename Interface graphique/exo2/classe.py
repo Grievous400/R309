@@ -76,6 +76,8 @@ class MainWindow(QMainWindow):
             msg.exec_()
 
         else:
+            # test la valeur de c pour savoir dans quel sens se fait la convertion
+
             if a == " °C -> K":
                 self.__lab4.setText(f'{b+273.15}')
             else:
@@ -89,7 +91,7 @@ class MainWindow(QMainWindow):
 
     def _changer(self):
         c = self.__choix.currentText()
-
+        #Change les unités en fonction de la convertion
         if c == " °C -> K":
             self.__lab2.setText("°C")
 
