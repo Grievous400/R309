@@ -27,6 +27,7 @@ class MainWindow(QMainWindow):
         lab3 =QLabel("Conversion")
         lab4=QLineEdit("")
         lab4.setEnabled(False)
+        #fais apparaitre la case grisé
         lab5 =QLabel("K")
 
 

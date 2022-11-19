@@ -4,7 +4,7 @@ import threading
 
 def envoyer(conn):
 
-        while True:
+    while True:
             reply = input("serveur :")
             if reply =='bye' or reply=='arret':
                 conn.close()
@@ -17,15 +17,13 @@ def envoyer(conn):
 
 def recevoir(conn):
     while True:
-        try:
             data = conn.recv(1024).decode()
             if data =='arret':
                 conn.close()
                 sys.exit()
             elif data:
                 print(f'Message reçu : {data}\n')
-        except:
-            break
+
 
 if __name__ == '__main__':
         server_socket = socket.socket()
@@ -34,12 +32,14 @@ if __name__ == '__main__':
         while True:
             try:
                 conn, address = server_socket.accept()
-                t1=threading.Thread(target=envoyer,args=[conn])
+                t1=threading.Thread(target=envoyer ,args=[conn])
                 t2=threading.Thread(target=recevoir,args=[conn])
 
                 t1.start()
                 t2.start()
+
                 t1.join()
                 t2.join()
+
             except:
                 conn, address = server_socket.accept()

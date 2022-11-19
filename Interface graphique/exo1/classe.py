@@ -43,7 +43,6 @@ class MainWindow(QMainWindow):
     def _actionOk(self):
         self.__lab2.setText(f'Bonjour {self.__text.text()}')
 
-
     def _actionQuitter(self):
         QCoreApplication.exit(0)
 
