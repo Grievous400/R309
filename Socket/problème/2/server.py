@@ -3,7 +3,6 @@ import sys
 import threading
 
 def envoyer(conn):
-
     while True:
             reply = input("serveur :")
             if reply =='bye' or reply=='arret':
@@ -11,10 +10,6 @@ def envoyer(conn):
                 sys.exit()
             elif reply:
                 conn.send(reply.encode())
-
-
-
-
 def recevoir(conn):
     while True:
             data = conn.recv(1024).decode()
@@ -23,7 +18,6 @@ def recevoir(conn):
                 sys.exit()
             elif data:
                 print(f'Message reçu : {data}\n')
-
 
 if __name__ == '__main__':
         server_socket = socket.socket()

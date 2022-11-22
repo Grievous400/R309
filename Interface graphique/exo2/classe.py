@@ -67,7 +67,9 @@ class MainWindow(QMainWindow):
     def _convertion(self):
 
         try:
+
             a = self.__choix.currentText()
+            #déclaration de la valeur en float pour effectuer la convertion dessus
             b=float(self.__text.text())
         except:
             msg = QMessageBox()
