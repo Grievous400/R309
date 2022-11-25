@@ -15,10 +15,10 @@ class MainWindow(QMainWindow):
         widget.setLayout(grid)
 
         cs= QLabel("Connexion à un server :")
-        host = QLineEdit('')
+        host = QLineEdit("")
         port = QLineEdit()
         co = QPushButton("Connexion")
-        aa=QLabel("Discussion")
+        aa=QLabel("Discussion : ")
 
         msg =QLineEdit()
         recu =QLabel("")
@@ -46,23 +46,5 @@ class MainWindow(QMainWindow):
 
 
     def connexion(self):
-        global client_socket
         client_socket = socket.socket()
         client_socket.connect((self.__host, self.__port))
-
-    def recevoir(self):
-        while True:
-            data = client_socket.recv(1024).decode()
-            self.__recu.setText(data)
-
-    def envoyer(self):
-        while True:
-            msg = self.__recu.setText("")
-            client_socket.send(msg.encode())
-
-
-class client(Thread):
-    def __init__(self,window):
-        Thread.__init__(self)
-        self.__window=window
-
