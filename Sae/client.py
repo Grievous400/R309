@@ -1,5 +1,5 @@
 import socket
-
+from threading import Thread
 import sys
 
 from PyQt5.QtCore import QCoreApplication
@@ -15,25 +15,54 @@ class MainWindow(QMainWindow):
         widget.setLayout(grid)
 
         cs= QLabel("Connexion à un server :")
-        host = QLineEdit()
+        host = QLineEdit('')
         port = QLineEdit()
+        co = QPushButton("Connexion")
+        aa=QLabel("Discussion")
 
-
-        co = QPushButton("Convertir")
+        msg =QLineEdit()
+        recu =QLabel("")
 
         co.clicked.connect(self.connexion)
 
         self.__cs=cs
         self.__host=host
-        self.port=port
+        self.__port=port
+        self.__msg=msg
+        self.__recu=recu
+        self.__aa=aa
+        self.__co=co
 
         grid.addWidget(cs, 0, 0)  # composant, ligne, colonne
-        grid.addWidget(host, 1, 1)  # composant, ligne, colonne
-        grid.addWidget(port, 1, 2)  # composant, ligne, colonne
-        self.setWindowTitle("Connexion à un client :")
+        grid.addWidget(host, 0, 1)  # composant, ligne, colonne
+        grid.addWidget(port, 0, 2)  # composant, ligne, colonne
+        grid.addWidget(co, 0, 3)  # composant, ligne, colonne
+        grid.addWidget(aa, 1, 0)  # composant, ligne, colonne
+        grid.addWidget(msg, 1, 1)  # composant, ligne, colonne
+        grid.addWidget(recu, 1, 2)  # composant, ligne, colonne
+
+        self.setWindowTitle("Connexion à un server :")
+
 
 
     def connexion(self):
+        global client_socket
         client_socket = socket.socket()
         client_socket.connect((self.__host, self.__port))
+
+    def recevoir(self):
+        while True:
+            data = client_socket.recv(1024).decode()
+            self.__recu.setText(data)
+
+    def envoyer(self):
+        while True:
+            msg = self.__recu.setText("")
+            client_socket.send(msg.encode())
+
+
+class client(Thread):
+    def __init__(self,window):
+        Thread.__init__(self)
+        self.__window=window
 
