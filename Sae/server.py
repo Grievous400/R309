@@ -58,8 +58,8 @@ def discussion(conn):
             a=(x[1])
             b=(x[0])
         except:
-            conn, address = server_socket.accept()
-
+            reply = "Commande non interprété du à des fautes d'orthographes"
+            conn.send(reply.encode())
         else:
             if b=="Linux" or b=="linux":
                 reply =str(os.system(a))
