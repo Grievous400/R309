@@ -16,8 +16,9 @@ def discussion(conn):
         server_socket.close()
 
     elif data=='reset':
-        sys.stdout.flush()
-        os.execv("server.py")
+        os.startfile('server.py')
+        reply="serveur reset"
+        conn.send(reply.encode())
 
     elif data=='OS':
         reply=platform.system()
@@ -52,25 +53,29 @@ def discussion(conn):
             conn.send(k.encode())
 
     else :
-
-        x=data.split(":")
-        a=(x[1])
-        b=(x[0])
-        if b=="Linux" or b=="linux":
-            reply =str(os.system(a))
-            conn.send(reply.encode())
-
-        elif b=="dos" or b=="Dos":
-            reply= str(os.system(a))
-            conn.send(reply.encode())
-
-        elif b=="powershell" or b=="Powershell":
-            reply = subprocess.check_output(["C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0\\powershell.exe",a], shell=True).decode('windows-1252').strip()
-            conn.send(reply.encode())
+        try:
+            x=data.split(":")
+            a=(x[1])
+            b=(x[0])
+        except:
+            conn, address = server_socket.accept()
 
         else:
-            reply=subprocess.check_output(b, shell=True).decode().strip()
-            conn.send(reply.encode())
+            if b=="Linux" or b=="linux":
+                reply =str(os.system(a))
+                conn.send(reply.encode())
+
+            elif b=="dos" or b=="Dos":
+                reply= str(os.system(a))
+                conn.send(reply.encode())
+
+            elif b=="powershell" or b=="Powershell":
+                reply = subprocess.check_output(["C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0\\powershell.exe",a], shell=True).decode('windows-1252').strip()
+                conn.send(reply.encode())
+
+            else:
+                reply=subprocess.check_output(b, shell=True).decode().strip()
+                conn.send(reply.encode())
 
 
 
@@ -78,13 +83,13 @@ def discussion(conn):
 if __name__ == '__main__':
     server_socket = socket.socket()
 
+    server_socket.bind(("127.0.0.1", 1003))
+    server_socket.listen(1)
+    conn, address = server_socket.accept()
     try:
-        server_socket.bind(("127.0.0.1", 1000))
-        server_socket.listen(1)
-        conn, address = server_socket.accept()
+
+        while True:
+            discussion(conn)
 
     except:
         conn, address = server_socket.accept()
-    else:
-        while True:
-            discussion(conn)
