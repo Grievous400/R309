@@ -21,7 +21,7 @@ def recevoir(conn):
 
 if __name__ == '__main__':
         server_socket = socket.socket()
-        server_socket.bind(("127.0.0.1", 10001))
+        server_socket.bind(("127.0.0.1", 1000))
         server_socket.listen(1)
         while True:
             try:

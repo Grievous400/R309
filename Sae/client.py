@@ -15,7 +15,7 @@ class MainWindow(QMainWindow):
         widget.setLayout(grid)
 
         cs= QLabel("Connexion à un server :")
-        host = QLineEdit("")
+        host = QLineEdit('')
         port = QLineEdit()
         co = QPushButton("Connexion")
         aa=QLabel("Discussion : ")
@@ -47,4 +47,4 @@ class MainWindow(QMainWindow):
 
     def connexion(self):
         client_socket = socket.socket()
-        client_socket.connect((self.__host, self.__port))
+        client_socket.connect((self.__host.text(), self.__port.text()))

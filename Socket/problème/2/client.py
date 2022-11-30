@@ -27,7 +27,7 @@ def recevoir(client_socket):
 if __name__ == '__main__':
     try:
         client_socket = socket.socket()
-        client_socket.connect(("127.0.0.1", 10001))
+        client_socket.connect(("127.0.0.1", 1000))
 
         while True:
             t1=threading.Thread(target=envoyer,args=[client_socket])
