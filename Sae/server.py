@@ -9,10 +9,10 @@ def discussion(conn):
 
     data = conn.recv(1024).decode()
     if data =='Disconnect':
-        print("a")
+        conn.close()
+        conn, addr = server_socket.accept()
 
     elif data=='kill':
-        conn.close()
         server_socket.close()
 
     elif data=='reset':
@@ -45,7 +45,7 @@ def discussion(conn):
     elif "ping" in  data:
         try:
             r=data.split(" ")
-            k =subprocess.check_output(f"ping {r[1]}", shell=True).decode('windows-1252').strip()
+            k =subprocess.check_output(f"ping {r[1]}", shell=True).decode('cp850').strip()
         except:
             k="Le ping ne passe pas"
             conn.send(k.encode())
@@ -82,7 +82,8 @@ def discussion(conn):
 
 if __name__ == '__main__':
     server_socket = socket.socket()
-
+    server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    #server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
     server_socket.bind(("127.0.0.1", 1003))
     server_socket.listen(1)
     conn, address = server_socket.accept()

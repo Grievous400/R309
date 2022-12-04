@@ -1,4 +1,4 @@
-import socket
+import socket,threading,sys
 
 #def a(client_socket):
     #reply = input("client :")
@@ -17,23 +17,21 @@ import socket
 #       while True:
 #           a(client_socket)
 
-class client():
+class client(threading.Thread):
     def __init__(self,host:str,port:int):
+        super().__init__()
         self.__host=host
         self.__port=port
-        self.__connexion=False
-
-
-    def etatco(self):
-        return(self.__connexion!=False)
+        self.__client=socket.socket
 
     def connexion(self):
-        client_socket=socket.socket()
-        client_socket.connect((self.__host,self.__port))
+        self.__client.connect((self.__host,self.__port))
 
-    def envoyer(self, reply):
-        socket.send(reply.encode())
-    def recevoir(self,data):
-        
-    #def fermer(self):
-    #    .close()
+    def envoyer(self):
+        reply=input("client :")
+        self.__client.send(reply.encode())
+    def recevoir(self):
+        self.__client.recv(1024).decode()
+
+    def fermer(self):
+        self.__client.close()
