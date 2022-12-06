@@ -1,9 +1,5 @@
 import socket, threading,sys
 
-""" 
-classe Client héritant de Thread
-doit implémenter la méthode run qui est immplictement appelé lorsque l'on démarre le thread à l'aide de start()
-"""
 class Client(threading.Thread):
 
     def __init__(self, host, port):
@@ -25,10 +21,9 @@ class Client(threading.Thread):
         else :
             print ("connexion réalisée")
             return 0
-    # méthode de dialogue synchrone
     def __dialogue(self):
         msg = ""
-        while msg != "kill" and msg != "disconnect" and msg != "reset":
+        while msg != "kill" and msg != "Disconnect" and msg != "reset":
             msg = input("client: ")
             self.__sock.send(msg.encode())
             msg = self.__sock.recv(1024).decode()

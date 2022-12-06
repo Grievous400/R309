@@ -70,7 +70,7 @@ def discussion(conn):
                 conn.send(reply.encode())
 
             elif b=="powershell" or b=="Powershell":
-                reply = subprocess.check_output(["C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0\\powershell.exe",a], shell=True).decode('windows-1252').strip()
+                reply = subprocess.check_output(["C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0\\powershell.exe",a], shell=True).decode('cp850').strip()
                 conn.send(reply.encode())
 
             else:
@@ -87,6 +87,7 @@ if __name__ == '__main__':
     server_socket.bind(("127.0.0.1", 1003))
     server_socket.listen(1)
     conn, address = server_socket.accept()
+    print("un client wesh")
     try:
 
         while True:
