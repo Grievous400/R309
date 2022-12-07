@@ -90,8 +90,11 @@ class MainWindow(QMainWindow):
 
     def envoyer(self):
         msg = self.msg.text()
-        reponse = self.client.envoyer(msg)
-        self.recu.append(reponse)
+        if msg =="cls" or msg =="clear":
+            self.recu.clear()
+        else:
+            reponse = self.client.envoyer(msg)
+            self.recu.append(reponse)
 
 
 if __name__ == '__main__':
