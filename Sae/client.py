@@ -1,7 +1,8 @@
 import socket
+import sys
 import threading
 
-from PyQt5.QtCore import QCoreApplication
+from PyQt5.QtCore import QCoreApplication, Qt
 from PyQt5.QtWidgets import *
 
 class Client(threading.Thread):
@@ -32,14 +33,13 @@ class Client(threading.Thread):
     def client_connect(self):
         self.__socketC.connect((self.__host,self.__port))
 
+    def envoyer(self, msg):
+        #while msg != "kill" and msg != "Disconnect" and msg != "reset":
+        self.__socketC.send(msg.encode())
+        reponse = self.__socketC.recv(32000).decode()
+        return reponse
 
-    def envoyer(self):
-        msg = ""
-        while msg != "kill" and msg != "disconnect" and msg != "reset":
-            msg = input("client: ")
-            self.__socketC.send(msg.encode())
-            reply = self.__socketC.recv(1024).decode()
-            print(reply)
+    def close(self):
         self.__socketC.close()
 
 
@@ -48,50 +48,54 @@ class MainWindow(QMainWindow):
         super().__init__()
         widget = QWidget()
         self.setCentralWidget(widget)
-
         grid = QGridLayout()
         widget.setLayout(grid)
 
-        cs = QLabel("Connexion à un server :")
-        host2 = QLineEdit('')
-        port2 = QLineEdit('')
-        co = QPushButton("Connexion")
-        aa = QLabel("Discussion : ")
 
-        s = QPushButton("Envoyer")
-        msg = QLineEdit()
-        recu = QLabel("")
+        self.cs = QLabel("Connexion à un server :")
+        self.host2 = QLineEdit('127.0.0.1')
+        self.port2 = QLineEdit('1003')
+        self.co = QPushButton("Connexion")
+        self.aa = QLabel("Discussion : ")
 
-        co.clicked.connect(self.connexion)
-        s.clicked.connect(self.send())
-
-        self.__cs = cs
-        self.__host2 = host2
-        self.__port2 = port2
-        self.__msg = msg
-        self.__recu = recu
-        self.__aa = aa
-        self.__co = co
-        self.__s = s
+        self.s = QPushButton("Envoyer")
+        self.msg = QLineEdit("")
+        self.recu= QTextEdit("")
 
 
-        grid.addWidget(cs, 0, 0)
-        grid.addWidget(host2, 0, 1)
-        grid.addWidget(port2, 0, 2)
-        grid.addWidget(co, 0, 3)
-        grid.addWidget(aa, 1, 0)
-        grid.addWidget(msg, 1, 1)
-        grid.addWidget(recu, 1, 2)
 
-        self.setWindowTitle("Connexion à un server :")
+        self.co.clicked.connect(self.connexion)
+        self.s.clicked.connect(self.envoyer)
+
+        grid.addWidget(self.cs, 0, 0)
+        grid.addWidget(self.host2, 0, 1)
+        grid.addWidget(self.port2, 0, 2)
+        grid.addWidget(self.co, 0, 3)
+        grid.addWidget(self.aa, 1, 0)
+        grid.addWidget(self.msg, 1, 1)
+        grid.addWidget(self.recu, 2, 1,9,6)
+        grid.addWidget(self.s, 1, 2)
+        self.resize(750,750)
+
+        self.client = None
+
+        self.setWindowTitle("Gestionnaire de serveur :")
 
     def connexion(self):
-        host=str(self.__host2.text())
-        port=int(self.__port2.text())
-        a=Client(host,port)
-        Client.client_connect(a)
+        host = str(self.host2.text())
+        port = int(self.port2.text())
+        self.client=Client(host,port)
+        self.client.client_connect()
+        self.co.setEnabled(False)
+
+    def envoyer(self):
+        msg = self.msg.text()
+        reponse = self.client.envoyer(msg)
+        self.recu.append(reponse)
 
 
-    def send(self):
-        m=self.__msg.text()
-        Client.envoyer(m)
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    window = MainWindow()
+    window.show()
+    app.exec()

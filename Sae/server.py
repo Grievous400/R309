@@ -8,76 +8,74 @@ import sys
 def discussion(conn):
 
     data = conn.recv(1024).decode()
-    if data =='Disconnect':
+
+    print(f"Commande reçue : {data}")
+
+    if data.lower() == 'disconnect':
+        conn.send(data.encode())
         conn.close()
-        conn, addr = server_socket.accept()
-
-    elif data=='kill':
+#        conn, addr = server_socket.accept()
+    elif data.lower() == 'kill':
+        conn.send(data.encode())
         server_socket.close()
-
-    elif data=='reset':
-        os.startfile('server.py')
-        reply="serveur reset"
+    elif data.lower() == 'reset':
+        conn.send(data.encode())
+    elif data == 'OS':
+        reply = platform.system()
+        print(f"OS = : {reply}")
         conn.send(reply.encode())
-
-    elif data=='OS':
-        reply=platform.system()
-        conn.send(reply.encode())
-
-    elif data=="RAM":
+        print("Renvoyé au client")
+    elif data == "RAM":
         reply =f'La mémoire totale est {psutil.virtual_memory().total >>30} GB. Il y a {psutil.virtual_memory().used >>30 } GB de  ram utilisé et {psutil.virtual_memory().total-psutil.virtual_memory().used>>30} GB de libre'
         conn.send(reply.encode())
-    elif data=='CPU':
-        reply=f'Le cpu est utilisé à {psutil.cpu_percent(5)} % dans les 5 dernières secondes'
+    elif data == 'CPU':
+        reply = f'Le cpu est utilisé à {psutil.cpu_percent(5)} % dans les 5 dernières secondes'
         conn.send(reply.encode())
     elif data=='Connexion information':
-        reply=f'L ip de la machine est {socket.gethostbyname(socket.gethostname())} et son nom est {socket.gethostname()}'
+        reply = f'L ip de la machine est {socket.gethostbyname(socket.gethostname())} et son nom est {socket.gethostname()}'
         conn.send(reply.encode())
-    elif data=='IP':
+    elif data == 'IP':
         reply=socket.gethostbyname(socket.gethostname())
         conn.send(reply.encode())
-    elif data=='Name':
+    elif data == 'Name':
         reply=socket.gethostname()
         conn.send(reply.encode())
-    elif data=="python --version":
+    elif data == "python --version":
         reply=subprocess.check_output("python --version", shell=True).decode().strip()
         conn.send(reply.encode())
-    elif "ping" in  data:
+    elif "ping" in data:
         try:
-            r=data.split(" ")
-            k =subprocess.check_output(f"ping {r[1]}", shell=True).decode('cp850').strip()
+            r = data.split(" ")
+            k = subprocess.check_output(f"ping {r[1]}", shell=True).decode('cp850').strip()
         except:
             k="Le ping ne passe pas"
             conn.send(k.encode())
         else:
             conn.send(k.encode())
-
-    else :
+    else:
         try:
-            x=data.split(":")
-            a=(x[1])
-            b=(x[0])
+            x = data.split(":")
+            a = (x[1])
+            b = (x[0])
         except:
             reply = "Commande non interprété du à des fautes d'orthographes"
             conn.send(reply.encode())
         else:
-            if b=="Linux" or b=="linux":
+            if b.lower() == "linux":
                 reply =str(os.system(a))
                 conn.send(reply.encode())
 
-            elif b=="dos" or b=="Dos":
-                reply= str(os.system(a))
+            elif b.lower() =="dos":
+                reply = str(os.system(a))
                 conn.send(reply.encode())
 
-            elif b=="powershell" or b=="Powershell":
+            elif b.lower() == "powershell":
                 reply = subprocess.check_output(["C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0\\powershell.exe",a], shell=True).decode('cp850').strip()
                 conn.send(reply.encode())
 
             else:
                 reply=subprocess.check_output(b, shell=True).decode().strip()
                 conn.send(reply.encode())
-
-
 
 
 if __name__ == '__main__':
@@ -89,9 +87,8 @@ if __name__ == '__main__':
     conn, address = server_socket.accept()
     print("un client wesh")
     try:
-
         while True:
             discussion(conn)
-
     except:
-        conn, address = server_socket.accept()
+        pass
+#        conn, address = server_socket.accept()

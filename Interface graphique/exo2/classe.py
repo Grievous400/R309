@@ -62,6 +62,8 @@ class MainWindow(QMainWindow):
         bouton.clicked.connect(self._aide)
         choix.currentTextChanged.connect(self._changer)
 
+        self.resize(750,750)
+
         self.setWindowTitle("Convertiseur :")
 
     def _convertion(self):

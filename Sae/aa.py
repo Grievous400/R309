@@ -26,7 +26,7 @@ class Client(threading.Thread):
         while msg != "kill" and msg != "Disconnect" and msg != "reset":
             msg = input("client: ")
             self.__sock.send(msg.encode())
-            msg = self.__sock.recv(1024).decode()
+            msg = self.__sock.recv(32000).decode()
             print(msg)
         self.__sock.close()
 
