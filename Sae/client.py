@@ -54,6 +54,7 @@ class MainWindow(QMainWindow):
 
         self.cs = QLabel("Connexion à un server :")
         self.host2 = QComboBox()
+        self.newip =QLineEdit("")
         with open('ip.csv') as csvfile:
             fichiercsv=csv.reader(csvfile)
             for row in fichiercsv:
@@ -65,26 +66,35 @@ class MainWindow(QMainWindow):
         self.port2 = QLineEdit('1003')
         self.co = QPushButton("Connexion")
         self.aa = QLabel("Discussion : ")
+        self.newipl = QLabel("Nouvelle IP : ")
 
         self.s = QPushButton("Envoyer")
         self.msg = QLineEdit("")
         self.recu= QTextEdit("")
 
         self.q=QPushButton("Quitter")
+        self.new=QPushButton("Saugarder la nouvelle adresse ")
+
 
         self.co.clicked.connect(self.connexion)
         self.s.clicked.connect(self.envoyer)
         self.q.clicked.connect(self.quit)
+        self.new.clicked.connect(self.newa)
 
         grid.addWidget(self.cs, 0, 0)
         grid.addWidget(self.host2, 0, 1)
-        grid.addWidget(self.port2, 0, 2)
+        grid.addWidget(self.port2, 0,2 )
         grid.addWidget(self.co, 0, 3)
-        grid.addWidget(self.q, 1, 3)
-        grid.addWidget(self.aa, 1, 0)
-        grid.addWidget(self.msg, 1, 1)
-        grid.addWidget(self.recu, 2, 1,9,6)
-        grid.addWidget(self.s, 1, 2)
+        grid.addWidget(self.q, 2, 3)
+        grid.addWidget(self.aa, 2, 0)
+        grid.addWidget(self.msg, 2, 1)
+        grid.addWidget(self.recu, 3, 1,9,6)
+        grid.addWidget(self.s, 2, 2)
+
+        grid.addWidget(self.newipl, 1, 0)
+        grid.addWidget(self.newip, 1, 1)
+        grid.addWidget(self.new, 1, 2)
+
         self.resize(750,750)
 
         self.client = None
@@ -111,6 +121,14 @@ class MainWindow(QMainWindow):
         self.co.setEnabled(True)
         self.q.setEnabled(False)
         self.client.close()
+
+    def newa(self):
+        a=self.newip.text()
+        self.host2.addItem(a)
+        with open('ip.csv','a',newline='') as csvfile:
+            spamwriter =csv.writer(csvfile)
+            spamwriter.writerow([a])
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

