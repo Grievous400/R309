@@ -1,7 +1,8 @@
 import socket
 import sys
 import threading
-
+import csv
+import re
 from PyQt5.QtCore import QCoreApplication, Qt
 from PyQt5.QtWidgets import *
 
@@ -53,7 +54,15 @@ class MainWindow(QMainWindow):
 
 
         self.cs = QLabel("Connexion à un server :")
-        self.host2 = QLineEdit('127.0.0.1')
+        self.host2 = QComboBox()
+        with open('ip.csv') as csvfile:
+            fichiercsv=csv.reader(csvfile)
+            for row in fichiercsv:
+                a=str(row)
+                characters="[] ' "
+                s= ''.join(x for x in a if x not in characters)
+                self.host2.addItem(s)
+
         self.port2 = QLineEdit('1003')
         self.co = QPushButton("Connexion")
         self.aa = QLabel("Discussion : ")
@@ -62,15 +71,17 @@ class MainWindow(QMainWindow):
         self.msg = QLineEdit("")
         self.recu= QTextEdit("")
 
-
+        self.q=QPushButton("Quitter")
 
         self.co.clicked.connect(self.connexion)
         self.s.clicked.connect(self.envoyer)
+        self.q.clicked.connect(self.quit)
 
         grid.addWidget(self.cs, 0, 0)
         grid.addWidget(self.host2, 0, 1)
         grid.addWidget(self.port2, 0, 2)
         grid.addWidget(self.co, 0, 3)
+        grid.addWidget(self.q, 1, 3)
         grid.addWidget(self.aa, 1, 0)
         grid.addWidget(self.msg, 1, 1)
         grid.addWidget(self.recu, 2, 1,9,6)
@@ -82,7 +93,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Gestionnaire de serveur :")
 
     def connexion(self):
-        host = str(self.host2.text())
+        host = str(self.host2.currentText())
         port = int(self.port2.text())
         self.client=Client(host,port)
         self.client.client_connect()
@@ -96,6 +107,8 @@ class MainWindow(QMainWindow):
             reponse = self.client.envoyer(msg)
             self.recu.append(reponse)
 
+    def quit(self):
+        self.client.close()
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
