@@ -2,7 +2,6 @@ import socket
 import sys
 import threading
 import csv
-import re
 from PyQt5.QtCore import QCoreApplication, Qt
 from PyQt5.QtWidgets import *
 
@@ -98,6 +97,7 @@ class MainWindow(QMainWindow):
         self.client=Client(host,port)
         self.client.client_connect()
         self.co.setEnabled(False)
+        self.q.setEnabled(True)
 
     def envoyer(self):
         msg = self.msg.text()
@@ -108,6 +108,8 @@ class MainWindow(QMainWindow):
             self.recu.append(reponse)
 
     def quit(self):
+        self.co.setEnabled(True)
+        self.q.setEnabled(False)
         self.client.close()
 
 if __name__ == '__main__':
