@@ -73,7 +73,7 @@ class MainWindow(QMainWindow):
         self.recu= QTextEdit("")
 
         self.q=QPushButton("Quitter")
-        self.new=QPushButton("Saugarder la nouvelle adresse ")
+        self.new=QPushButton("Sauvegarder la nouvelle adresse ")
 
 
         self.co.clicked.connect(self.connexion)

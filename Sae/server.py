@@ -37,16 +37,25 @@ def discussion(conn):
     elif data == 'IP':
         reply=socket.gethostbyname(socket.gethostname())
         conn.send(reply.encode())
+
     elif data == 'Name':
         reply=socket.gethostname()
         conn.send(reply.encode())
     elif data == "python --version":
-        reply=subprocess.check_output("python --version", shell=True).decode().strip()
-        conn.send(reply.encode())
+        if platform.system() == 'Linux':
+            reply=subprocess.check_output("python3 --version", shell=True).decode().strip()
+            conn.send(reply.encode())
+        else:
+            reply = subprocess.check_output("python3 --version", shell=True).decode().strip()
+            conn.send(reply.encode())
     elif "ping" in data:
         try:
             r = data.split(" ")
-            k = subprocess.check_output(f"ping {r[1]}", shell=True).decode('cp850').strip()
+            if platform.system()=='Linux':
+                k = subprocess.check_output(f"ping -c 4 {r[1]}", shell=True).decode().strip()
+            else:
+                k = subprocess.check_output(f"ping {r[1]}", shell=True).decode('cp850').strip()
+
         except:
             k="Le ping ne passe pas"
             conn.send(k.encode())
@@ -82,7 +91,7 @@ if __name__ == '__main__':
     server_socket = socket.socket()
     server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     #server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
-    server_socket.bind(("127.0.0.1", 1003))
+    server_socket.bind(("0.0.0.0", 1003))
     server_socket.listen(1)
     conn, address = server_socket.accept()
     print("un client wesh")
