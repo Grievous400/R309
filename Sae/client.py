@@ -4,6 +4,8 @@ import threading
 import csv
 from PyQt5.QtCore import QCoreApplication, Qt
 from PyQt5.QtWidgets import *
+from PyQt5.uic.properties import QtWidgets
+
 
 class Client(threading.Thread):
     def __init__(self, host, port):
@@ -74,12 +76,13 @@ class MainWindow(QMainWindow):
 
         self.q=QPushButton("Quitter")
         self.new=QPushButton("Sauvegarder la nouvelle adresse ")
-
+        self.newd=QPushButton("Nouvelle fenetre")
 
         self.co.clicked.connect(self.connexion)
         self.s.clicked.connect(self.envoyer)
         self.q.clicked.connect(self.quit)
         self.new.clicked.connect(self.newa)
+        self.newd.clicked.connect(self.create_new_document)
 
         grid.addWidget(self.cs, 0, 0)
         grid.addWidget(self.host2, 0, 1)
@@ -94,10 +97,13 @@ class MainWindow(QMainWindow):
         grid.addWidget(self.newipl, 1, 0)
         grid.addWidget(self.newip, 1, 1)
         grid.addWidget(self.new, 1, 2)
+        grid.addWidget(self.newd, 3, 0)
+
 
         self.resize(750,750)
 
         self.client = None
+        self.wind2 =None
 
         self.setWindowTitle("Gestionnaire de serveur :")
 
@@ -129,9 +135,13 @@ class MainWindow(QMainWindow):
             spamwriter =csv.writer(csvfile)
             spamwriter.writerow([a])
 
+    def create_new_document(self):
+        self.wind2=MainWindow()
+        self.wind2.show()
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
+
     window = MainWindow()
     window.show()
     app.exec()
