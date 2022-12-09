@@ -77,6 +77,8 @@ class MainWindow(QMainWindow):
         self.q=QPushButton("Quitter")
         self.new=QPushButton("Sauvegarder la nouvelle adresse ")
         self.newd=QPushButton("Nouvelle fenetre")
+        self.q.setEnabled(False)
+        self.s.setEnabled(False)
 
         self.co.clicked.connect(self.connexion)
         self.s.clicked.connect(self.envoyer)
@@ -114,6 +116,8 @@ class MainWindow(QMainWindow):
         self.client.client_connect()
         self.co.setEnabled(False)
         self.q.setEnabled(True)
+        self.msg.setEnabled(True)
+
 
     def envoyer(self):
         msg = self.msg.text()
@@ -126,6 +130,8 @@ class MainWindow(QMainWindow):
     def quit(self):
         self.co.setEnabled(True)
         self.q.setEnabled(False)
+        self.s.setEnabled(False)
+
         self.client.close()
 
     def newa(self):
