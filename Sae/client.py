@@ -53,6 +53,9 @@ class MainWindow(QMainWindow):
         grid = QGridLayout()
         widget.setLayout(grid)
 
+        with open('client.css', 'r') as f:
+            c = f.read()
+        app.setStyleSheet(c)
 
         self.cs = QLabel("Connexion à un server :")
         self.host2 = QComboBox()
