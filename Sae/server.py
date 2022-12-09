@@ -46,7 +46,7 @@ def discussion(conn):
             reply=subprocess.check_output("python3 --version", shell=True).decode().strip()
             conn.send(reply.encode())
         else:
-            reply = subprocess.check_output("python3 --version", shell=True).decode().strip()
+            reply = subprocess.check_output("python --version", shell=True).decode().strip()
             conn.send(reply.encode())
     elif "ping" in data:
         try:
@@ -71,16 +71,39 @@ def discussion(conn):
             conn.send(reply.encode())
         else:
             if b.lower() == "linux":
-                reply =subprocess.check_output(a, shell=True).decode().strip()
-                conn.send(reply.encode())
+                try:
+                    reply =subprocess.check_output(a, shell=True).decode().strip()
+                    conn.send(reply.encode())
+                    if reply == "":
+                        reply = "Commande exécuté et réussi "
+                        conn.send(reply.encode())
+                except:
+                    reply = "Commande non interprété du à des fautes d'orthographes"
+                    conn.send(reply.encode())
 
             elif b.lower() =="dos":
-                reply =subprocess.check_output(a, shell=True).decode('cp850').strip()
-                conn.send(reply.encode())
+                try:
+                    reply =subprocess.check_output(a, shell=True).decode('cp850').strip()
+                    conn.send(reply.encode())
+
+                    if reply == "":
+                        reply = "Commande exécuté et réussi "
+                        conn.send(reply.encode())
+                except:
+                    reply="Commande non interprété du à des fautes d'orthographes"
+                    conn.send(reply.encode())
+
 
             elif b.lower() == "powershell":
-                reply = subprocess.check_output(["C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0\\powershell.exe",a], shell=True).decode('cp850').strip()
-                conn.send(reply.encode())
+                try:
+                    reply = subprocess.check_output(["C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0\\powershell.exe",a], shell=True).decode('cp850').strip()
+                    conn.send(reply.encode())
+                    if reply == "":
+                        reply = "Commande exécuté et réussi "
+                        conn.send(reply.encode())
+                except:
+                    reply = "Commande non interprété du à des fautes d'orthographes"
+                    conn.send(reply.encode())
 
             else:
                 reply=subprocess.check_output(b, shell=True).decode().strip()
@@ -94,7 +117,7 @@ if __name__ == '__main__':
     server_socket.bind(("0.0.0.0", 1003))
     server_socket.listen(1)
     conn, address = server_socket.accept()
-    print("un client wesh")
+    print("Un nouveau client est connecté")
     try:
         while True:
             discussion(conn)

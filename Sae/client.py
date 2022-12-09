@@ -4,7 +4,7 @@ import threading
 import csv
 from PyQt5.QtCore import QCoreApplication, Qt
 from PyQt5.QtWidgets import *
-from PyQt5.uic.properties import QtWidgets
+from PyQt5.uic.properties import *
 
 
 class Client(threading.Thread):
@@ -106,7 +106,6 @@ class MainWindow(QMainWindow):
 
         self.client = None
         self.wind2 =None
-
         self.setWindowTitle("Gestionnaire de serveur :")
 
     def connexion(self):
@@ -116,7 +115,7 @@ class MainWindow(QMainWindow):
         self.client.client_connect()
         self.co.setEnabled(False)
         self.q.setEnabled(True)
-        self.msg.setEnabled(True)
+        self.s.setEnabled(True)
 
 
     def envoyer(self):
