@@ -20,25 +20,25 @@ def discussion(conn):
         server_socket.close()
     elif data.lower() == 'reset':
         conn.send(data.encode())
-    elif data == 'OS':
+    elif data.lower() == 'os':
         reply = platform.system()
         print(f"OS = : {reply}")
         conn.send(reply.encode())
         print("Renvoyé au client")
-    elif data == "RAM":
+    elif data.lower() == "ram":
         reply =f'La mémoire totale est {psutil.virtual_memory().total >>30} GB. Il y a {psutil.virtual_memory().used >>30 } GB de  ram utilisé et {psutil.virtual_memory().total-psutil.virtual_memory().used>>30} GB de libre'
         conn.send(reply.encode())
-    elif data == 'CPU':
+    elif data.lower() == 'cpu':
         reply = f'Le cpu est utilisé à {psutil.cpu_percent(5)} % dans les 5 dernières secondes'
         conn.send(reply.encode())
-    elif data=='Connexion information':
+    elif data.lower()=='connexion information':
         reply = f'L ip de la machine est {socket.gethostbyname(socket.gethostname())} et son nom est {socket.gethostname()}'
         conn.send(reply.encode())
-    elif data == 'IP':
+    elif data.lower() == 'ip':
         reply=socket.gethostbyname(socket.gethostname())
         conn.send(reply.encode())
 
-    elif data == 'Name':
+    elif data.lower() == 'name':
         reply=socket.gethostname()
         conn.send(reply.encode())
     elif data == "python --version":
