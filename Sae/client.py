@@ -116,47 +116,88 @@ class MainWindow(QMainWindow):
         self.fichiercsvnom=None
 
     def connexion(self):
-        host = str(self.host2.currentText())
-        port = int(self.port2.text())
-        self.client=Client(host,port)
-        self.client.client_connect()
-        self.co.setEnabled(False)
-        self.q.setEnabled(True)
-        self.s.setEnabled(True)
+        try:
+            host = str(self.host2.currentText())
+            port = int(self.port2.text())
+            self.client = Client(host, port)
+            self.client.client_connect()
+        except:
+            msg = QMessageBox()
+            msg.setWindowTitle("Erreur de connexion ")
+            msg.setText("Les valeurs de l'adresse ip et du port sont incorrectes")
+            msg.exec_()
+        else:
+            self.co.setEnabled(False)
+            self.q.setEnabled(True)
+            self.s.setEnabled(True)
 
 
     def envoyer(self):
-        msg = self.msg.text()
-        if msg =="cls" or msg =="clear":
-            self.recu.clear()
+        try:
+            msg = self.msg.text()
+        except:
+            msg = QMessageBox()
+            msg.setWindowTitle("Erreur")
+            msg.setText("Erreur d'envoie de message")
+            msg.exec_()
         else:
-            reponse = self.client.envoyer(msg)
-            self.recu.append(reponse)
+            if msg =="cls" or msg =="clear":
+                self.recu.clear()
+            else:
+                reponse = self.client.envoyer(msg)
+                self.recu.append(reponse)
 
     def quit(self):
         self.co.setEnabled(True)
         self.q.setEnabled(False)
         self.s.setEnabled(False)
-
+        msg = QMessageBox()
+        msg.setWindowTitle("Quitter")
+        msg.setText("Vous etes déconnectés")
+        msg.exec_()
         self.client.close()
 
     def newa(self):
-        a=self.newip.text()
-        self.host2.addItem(a)
+        try:
+            a=self.newip.text()
+            self.host2.addItem(a)
+        except:
+            msg = QMessageBox()
+            msg.setWindowTitle("Erreur")
+            msg.setText("La valeur entrée n'est pas bonne")
+            msg.exec_()
+        else:
+            with open(self.fichiercsvnom,'a',newline='') as csvfile:
+                spamwriter =csv.writer(csvfile)
+                spamwriter.writerow([a])
+            msg = QMessageBox()
+            msg.setWindowTitle("Ajout d'une addrese Ip")
+            msg.setText("L'adresse a été correctement ajouté ")
+            msg.exec_()
+            self.newip.clear()
 
-        with open(self.fichiercsvnom,'a',newline='') as csvfile:
-            spamwriter =csv.writer(csvfile)
-            spamwriter.writerow([a])
 
     def lirefichiercsv(self):
-        self.fichiercsvnom=str(self.fichiercsv.text())
-        with open(self.fichiercsvnom) as csvfile:
-            fichiercsv=csv.reader(csvfile)
-            for row in fichiercsv:
-                a=str(row)
-                characters="[] ' "
-                s= ''.join(x for x in a if x not in characters)
-                self.host2.addItem(s)
+        try:
+            self.fichiercsvnom=self.fichiercsv.text()
+            with open(self.fichiercsvnom) as csvfile:
+                fichiercsv = csv.reader(csvfile)
+                for row in fichiercsv:
+                    a = str(row)
+                    characters = "[] ' "
+                    s = ''.join(x for x in a if x not in characters)
+                    self.host2.addItem(s)
+        except:
+            msg = QMessageBox()
+            msg.setWindowTitle("Erreur")
+            msg.setText("Fichier non trouvé")
+            msg.exec_()
+        else:
+            msg = QMessageBox()
+            msg.setWindowTitle("Lecture de fichier csv")
+            msg.setText("Le fichier a été lu avec succès")
+            msg.exec_()
+            self.fichiercsv.clear()
 
 
     def create_new_document(self):
