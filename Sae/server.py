@@ -93,7 +93,6 @@ def discussion(conn):
                     reply="Commande non interprété du à des fautes d'orthographes"
                     conn.send(reply.encode())
 
-
             elif b.lower() == "powershell":
                 try:
                     reply = subprocess.check_output(["C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0\\powershell.exe",a], shell=True).decode('cp850').strip()
@@ -114,7 +113,7 @@ if __name__ == '__main__':
     server_socket = socket.socket()
     server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     #server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
-    server_socket.bind(("0.0.0.0", 1003))
+    server_socket.bind(("0.0.0.0", 10005))
     server_socket.listen(1)
     conn, address = server_socket.accept()
     print("Un nouveau client est connecté")

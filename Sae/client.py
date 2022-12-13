@@ -60,15 +60,13 @@ class MainWindow(QMainWindow):
         self.cs = QLabel("Connexion à un server :")
         self.host2 = QComboBox()
         self.newip =QLineEdit("")
-        with open('ip.csv') as csvfile:
-            fichiercsv=csv.reader(csvfile)
-            for row in fichiercsv:
-                a=str(row)
-                characters="[] ' "
-                s= ''.join(x for x in a if x not in characters)
-                self.host2.addItem(s)
 
-        self.port2 = QLineEdit('1003')
+        self.fichiercsv =QLineEdit("")
+        self.fichierla =QLabel("nom du fichier csv :")
+        self.fichiercsvlire =QPushButton("Lire le fichier csv")
+
+
+        self.port2 = QLineEdit('10005')
         self.co = QPushButton("Connexion")
         self.aa = QLabel("Discussion : ")
         self.newipl = QLabel("Nouvelle IP : ")
@@ -88,28 +86,34 @@ class MainWindow(QMainWindow):
         self.q.clicked.connect(self.quit)
         self.new.clicked.connect(self.newa)
         self.newd.clicked.connect(self.create_new_document)
+        self.fichiercsvlire.clicked.connect(self.lirefichiercsv)
 
-        grid.addWidget(self.cs, 0, 0)
-        grid.addWidget(self.host2, 0, 1)
-        grid.addWidget(self.port2, 0,2 )
-        grid.addWidget(self.co, 0, 3)
-        grid.addWidget(self.q, 2, 3)
-        grid.addWidget(self.aa, 2, 0)
-        grid.addWidget(self.msg, 2, 1)
-        grid.addWidget(self.recu, 3, 1,9,6)
-        grid.addWidget(self.s, 2, 2)
+        grid.addWidget(self.cs, 1, 0)
+        grid.addWidget(self.host2, 1, 1)
+        grid.addWidget(self.port2, 1,2 )
+        grid.addWidget(self.co, 1, 3)
+        grid.addWidget(self.q, 3, 3)
+        grid.addWidget(self.aa, 3, 0)
+        grid.addWidget(self.msg, 3, 1)
+        grid.addWidget(self.recu, 4, 1,9,6)
+        grid.addWidget(self.s, 3, 2)
 
-        grid.addWidget(self.newipl, 1, 0)
-        grid.addWidget(self.newip, 1, 1)
-        grid.addWidget(self.new, 1, 2)
-        grid.addWidget(self.newd, 3, 0)
+        grid.addWidget(self.newipl, 2, 0)
+        grid.addWidget(self.newip, 2, 1)
+        grid.addWidget(self.new, 2, 2)
+        grid.addWidget(self.newd, 4, 0)
+
+        grid.addWidget(self.fichierla, 0, 1)
+        grid.addWidget(self.fichiercsv, 0, 2)
+        grid.addWidget(self.fichiercsvlire, 0, 3)
+
 
 
         self.resize(750,750)
-
         self.client = None
         self.wind2 =None
         self.setWindowTitle("Gestionnaire de serveur :")
+        self.fichiercsvnom=None
 
     def connexion(self):
         host = str(self.host2.currentText())
@@ -139,9 +143,21 @@ class MainWindow(QMainWindow):
     def newa(self):
         a=self.newip.text()
         self.host2.addItem(a)
-        with open('ip.csv','a',newline='') as csvfile:
+
+        with open(self.fichiercsvnom,'a',newline='') as csvfile:
             spamwriter =csv.writer(csvfile)
             spamwriter.writerow([a])
+
+    def lirefichiercsv(self):
+        self.fichiercsvnom=str(self.fichiercsv.text())
+        with open(self.fichiercsvnom) as csvfile:
+            fichiercsv=csv.reader(csvfile)
+            for row in fichiercsv:
+                a=str(row)
+                characters="[] ' "
+                s= ''.join(x for x in a if x not in characters)
+                self.host2.addItem(s)
+
 
     def create_new_document(self):
         self.wind2=MainWindow()
@@ -149,7 +165,6 @@ class MainWindow(QMainWindow):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-
     window = MainWindow()
     window.show()
     app.exec()
