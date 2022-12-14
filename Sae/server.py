@@ -25,9 +25,10 @@ def discussion(conn):
         print("Serveur reset")
     elif data.lower() == 'os':
         reply = platform.system()
-        print(f"OS = : {reply}")
+        a=platform.release()
+        b=os.name
+        reply=f"OS = : {reply} {b} {a}"
         conn.send(reply.encode())
-        print("Renvoyé au client")
     elif data.lower() == "ram":
         reply =f'La mémoire totale est {psutil.virtual_memory().total >>30} GB. Il y a {psutil.virtual_memory().used >>30 } GB de  ram utilisé et {psutil.virtual_memory().total-psutil.virtual_memory().used>>30} GB de libre'
         conn.send(reply.encode())

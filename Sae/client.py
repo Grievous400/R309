@@ -56,16 +56,12 @@ class MainWindow(QMainWindow):
         grid = QGridLayout()
         widget.setLayout(grid)
 
-        with open('client.css', 'r') as f:
-            c = f.read()
-        app.setStyleSheet(c)
-
         self.cs = QLabel("Connexion à un server :")
         self.host2 = QComboBox()
         self.newip =QLineEdit("")
 
         self.fichiercsv =QLineEdit("")
-        self.fichierla =QLabel("nom du fichier csv :")
+        self.fichierla =QLabel("Nom du fichier csv a importé :")
         self.fichiercsvlire =QPushButton("Lire le fichier csv")
 
 
@@ -98,13 +94,13 @@ class MainWindow(QMainWindow):
         grid.addWidget(self.q, 3, 3)
         grid.addWidget(self.aa, 3, 0)
         grid.addWidget(self.msg, 3, 1)
-        grid.addWidget(self.recu, 4, 1,9,6)
+        grid.addWidget(self.recu, 4, 0,9,6)
         grid.addWidget(self.s, 3, 2)
 
         grid.addWidget(self.newipl, 2, 0)
         grid.addWidget(self.newip, 2, 1)
         grid.addWidget(self.new, 2, 2)
-        grid.addWidget(self.newd, 4, 0)
+        grid.addWidget(self.newd, 0, 0)
 
         grid.addWidget(self.fichierla, 0, 1)
         grid.addWidget(self.fichiercsv, 0, 2)
@@ -175,15 +171,16 @@ class MainWindow(QMainWindow):
         try:
             a=self.newip.text()
             self.host2.addItem(a)
-        except:
-            msg = QMessageBox()
-            msg.setWindowTitle("Erreur")
-            msg.setText("La valeur entrée n'est pas bonne")
-            msg.exec_()
-        else:
             with open(self.fichiercsvnom,'a',newline='') as csvfile:
                 spamwriter =csv.writer(csvfile)
                 spamwriter.writerow([a])
+        except:
+            msg = QMessageBox()
+            msg.setWindowTitle("Ajout d'une addrese Ip")
+            msg.setText("L'adresse a été correctement ajouté")
+            msg.exec_()
+
+        else:
             msg = QMessageBox()
             msg.setWindowTitle("Ajout d'une addrese Ip")
             msg.setText("L'adresse a été correctement ajouté ")
