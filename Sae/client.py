@@ -42,7 +42,10 @@ class Client(threading.Thread):
         return reponse
 
     def close(self):
-        self.__socketC.close()
+        msg='disconnect'
+        self.__socketC.send(msg.encode())
+        reponse = self.__socketC.recv(32000).decode()
+        return reponse
 
 
 class MainWindow(QMainWindow):
@@ -124,7 +127,7 @@ class MainWindow(QMainWindow):
         except:
             msg = QMessageBox()
             msg.setWindowTitle("Erreur de connexion ")
-            msg.setText("Les valeurs de l'adresse ip et du port sont incorrectes")
+            msg.setText("Les valeurs de l'adresse ip et du port sont incorrectes ou le serveur n'est pas allumé")
             msg.exec_()
         else:
             self.co.setEnabled(False)
@@ -143,9 +146,19 @@ class MainWindow(QMainWindow):
         else:
             if msg =="cls" or msg =="clear":
                 self.recu.clear()
-            else:
+            elif msg =="disconnect" or msg=='reset':
+                histo = f'Commande utilisé: {msg}\n'
+                self.recu.append(str(histo))
                 reponse = self.client.envoyer(msg)
                 self.recu.append(reponse)
+                self.q.setEnabled(False)
+                self.co.setEnabled(True)
+            else:
+                histo=f'Commande utilisé: {msg}'
+                self.recu.append(str(histo))
+                reponse = self.client.envoyer(msg)
+                self.recu.append(reponse)
+
 
     def quit(self):
         self.co.setEnabled(True)
@@ -156,6 +169,7 @@ class MainWindow(QMainWindow):
         msg.setText("Vous etes déconnectés")
         msg.exec_()
         self.client.close()
+
 
     def newa(self):
         try:

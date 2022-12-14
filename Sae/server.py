@@ -14,12 +14,15 @@ def discussion(conn):
     if data.lower() == 'disconnect':
         conn.send(data.encode())
         conn.close()
-#        conn, addr = server_socket.accept()
+
     elif data.lower() == 'kill':
         conn.send(data.encode())
         server_socket.close()
+        
     elif data.lower() == 'reset':
         conn.send(data.encode())
+        os.execv(sys.executable,['python3'] + sys.argv)
+        print("Serveur reset")
     elif data.lower() == 'os':
         reply = platform.system()
         print(f"OS = : {reply}")
@@ -78,7 +81,7 @@ def discussion(conn):
                         reply = "Commande exécuté et réussi "
                         conn.send(reply.encode())
                 except:
-                    reply = "Commande non interprété du à des fautes d'orthographes"
+                    reply = "Commande non interprété du à des fautes d'orthographes ou non existante"
                     conn.send(reply.encode())
 
             elif b.lower() =="dos":
@@ -90,8 +93,9 @@ def discussion(conn):
                         reply = "Commande exécuté et réussi "
                         conn.send(reply.encode())
                 except:
-                    reply="Commande non interprété du à des fautes d'orthographes"
+                    reply="Commande non interprété du à des fautes d'orthographes ou non existante"
                     conn.send(reply.encode())
+
 
             elif b.lower() == "powershell":
                 try:
@@ -101,7 +105,7 @@ def discussion(conn):
                         reply = "Commande exécuté et réussi "
                         conn.send(reply.encode())
                 except:
-                    reply = "Commande non interprété du à des fautes d'orthographes"
+                    reply = "Commande non interprété du à des fautes d'orthographes ou non existante "
                     conn.send(reply.encode())
 
             else:
@@ -116,9 +120,10 @@ if __name__ == '__main__':
     server_socket.bind(("0.0.0.0", 10005))
     server_socket.listen(1)
     conn, address = server_socket.accept()
-    print("Un nouveau client est connecté")
-    try:
-        while True:
+    print("Un client est connecté")
+    while True:
+        try:
             discussion(conn)
-    except:
-        conn, address = server_socket.accept()
+        except:
+            conn, address = server_socket.accept()
+            print("Un client est connect")
