@@ -4,7 +4,6 @@ import csv
 from PyQt5.QtWidgets import *
 from PyQt5.uic.properties import *
 
-
 class Client(threading.Thread):
     def __init__(self, host, port):
         super().__init__()
@@ -34,7 +33,6 @@ class Client(threading.Thread):
         self.__socketC.connect((self.__host,self.__port))
 
     def envoyer(self, msg):
-        #while msg != "kill" and msg != "Disconnect" and msg != "reset":
         self.__socketC.send(msg.encode())
         reponse = self.__socketC.recv(32000).decode()
         return reponse
@@ -44,7 +42,6 @@ class Client(threading.Thread):
         self.__socketC.send(msg.encode())
         reponse = self.__socketC.recv(320000).decode()
         return reponse
-
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -94,17 +91,13 @@ class MainWindow(QMainWindow):
         grid.addWidget(self.msg, 3, 1)
         grid.addWidget(self.recu, 4, 0,9,6)
         grid.addWidget(self.s, 3, 2)
-
         grid.addWidget(self.newipl, 2, 0)
         grid.addWidget(self.newip, 2, 1)
         grid.addWidget(self.new, 2, 2)
         grid.addWidget(self.newd, 0, 0)
-
         grid.addWidget(self.fichierla, 0, 1)
         grid.addWidget(self.fichiercsv, 0, 2)
         grid.addWidget(self.fichiercsvlire, 0, 3)
-
-
 
         self.resize(750,750)
         self.client = None
@@ -132,7 +125,6 @@ class MainWindow(QMainWindow):
             self.q.setEnabled(True)
             self.s.setEnabled(True)
 
-
     def envoyer(self):
         try:
             msg = self.msg.text()
@@ -157,7 +149,6 @@ class MainWindow(QMainWindow):
                 reponse = self.client.envoyer(msg)
                 self.recu.append(reponse)
 
-
     def quit(self):
         self.co.setEnabled(True)
         self.q.setEnabled(False)
@@ -167,7 +158,6 @@ class MainWindow(QMainWindow):
         msg.setText("Vous etes déconnectés")
         msg.exec_()
         self.client.close()
-
 
     def newa(self):
         try:
@@ -181,7 +171,6 @@ class MainWindow(QMainWindow):
             msg.setWindowTitle("Ajout d'une addrese Ip")
             msg.setText("L'adresse a été correctement ajouté")
             msg.exec_()
-
         else:
 
             msg = QMessageBox()
@@ -189,8 +178,6 @@ class MainWindow(QMainWindow):
             msg.setText("L'adresse a été correctement ajouté ")
             msg.exec_()
             self.newip.clear()
-
-
 
     def lirefichiercsv(self):
         try:
@@ -213,7 +200,6 @@ class MainWindow(QMainWindow):
             msg.setText("Le fichier a été lu avec succès")
             msg.exec_()
             self.fichiercsv.clear()
-
 
     def create_new_document(self):
         self.wind2=MainWindow()

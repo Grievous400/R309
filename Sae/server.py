@@ -6,19 +6,14 @@ import psutil
 import sys
 
 def discussion(conn):
-
     data = conn.recv(1024).decode()
-
     print(f"Commande reçue : {data}")
-
     if data.lower() == 'disconnect':
         conn.send(data.encode())
         conn.close()
-
     elif data.lower() == 'kill':
         conn.send(data.encode())
         server_socket.close()
-        
     elif data.lower() == 'reset':
         conn.send(data.encode())
         os.execv(sys.executable,['python3'] + sys.argv)
@@ -41,7 +36,6 @@ def discussion(conn):
     elif data.lower() == 'ip':
         reply=socket.gethostbyname(socket.gethostname())
         conn.send(reply.encode())
-
     elif data.lower() == 'name':
         reply=socket.gethostname()
         conn.send(reply.encode())
@@ -59,7 +53,6 @@ def discussion(conn):
                 k = subprocess.check_output(f"ping -c 4 {r[1]}", shell=True).decode().strip()
             else:
                 k = subprocess.check_output(f"ping {r[1]}", shell=True).decode('cp850').strip()
-
         except:
             k="Le ping ne passe pas"
             conn.send(k.encode())
@@ -85,26 +78,20 @@ def discussion(conn):
                     if reply == "":
                         reply = "Commande exécuté et réussi "
                         conn.send(reply.encode())
-
-
             elif b.lower() =="dos":
                 try:
                     reply =subprocess.check_output(a, shell=True).decode('cp850').strip()
-
                 except:
                     reply="Commande non interprété du à des fautes d'orthographes ou non existante"
                     conn.send(reply.encode())
                 else:
                     conn.send(reply.encode())
-
                     if reply == "":
                         reply = "Commande exécuté et réussi "
                         conn.send(reply.encode())
-
             elif b.lower() == "powershell":
                 try:
                     reply = subprocess.check_output(["C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0\\powershell.exe",a], shell=True).decode('cp850').strip()
-
                 except:
                     reply = "Commande non interprété du à des fautes d'orthographes ou non existante "
                     conn.send(reply.encode())
@@ -113,7 +100,6 @@ def discussion(conn):
                     if reply == "":
                         reply = "Commande exécuté et réussi "
                         conn.send(reply.encode())
-
             elif b.lower() =="mac":
                 try:
                     reply =subprocess.check_output(a, shell=True).decode().strip()
@@ -131,7 +117,6 @@ def discussion(conn):
 if __name__ == '__main__':
     server_socket = socket.socket()
     server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    #server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
     server_socket.bind(("0.0.0.0", 10005))
     server_socket.listen(1)
     conn, address = server_socket.accept()
