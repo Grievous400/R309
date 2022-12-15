@@ -77,13 +77,15 @@ def discussion(conn):
             if b.lower() == "linux":
                 try:
                     reply =subprocess.check_output(a, shell=True).decode().strip()
+                except:
+                    reply = "Commande non interprété du à des fautes d'orthographes ou non existante"
+                    conn.send(reply.encode())
+                else:
                     conn.send(reply.encode())
                     if reply == "":
                         reply = "Commande exécuté et réussi "
                         conn.send(reply.encode())
-                except:
-                    reply = "Commande non interprété du à des fautes d'orthographes ou non existante"
-                    conn.send(reply.encode())
+
 
             elif b.lower() =="dos":
                 try:
@@ -96,23 +98,37 @@ def discussion(conn):
                 except:
                     reply="Commande non interprété du à des fautes d'orthographes ou non existante"
                     conn.send(reply.encode())
+                else:
+                    conn.send(reply.encode())
 
+                    if reply == "":
+                        reply = "Commande exécuté et réussi "
+                        conn.send(reply.encode())
 
             elif b.lower() == "powershell":
                 try:
                     reply = subprocess.check_output(["C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0\\powershell.exe",a], shell=True).decode('cp850').strip()
+
+                except:
+                    reply = "Commande non interprété du à des fautes d'orthographes ou non existante "
+                    conn.send(reply.encode())
+                else:
                     conn.send(reply.encode())
                     if reply == "":
                         reply = "Commande exécuté et réussi "
                         conn.send(reply.encode())
+
+            elif b.lower() =="mac":
+                try:
+                    reply =subprocess.check_output(a, shell=True).decode().strip()
                 except:
-                    reply = "Commande non interprété du à des fautes d'orthographes ou non existante "
+                    reply="Commande non interprété du à des fautes d'orthographes ou non existante "
                     conn.send(reply.encode())
-
+                else:
+                    conn.send(reply.encode())
             else:
-                reply=subprocess.check_output(b, shell=True).decode().strip()
+                reply = "Commande non interprété du à des fautes d'orthographes ou non existante "
                 conn.send(reply.encode())
-
 
 if __name__ == '__main__':
     server_socket = socket.socket()

@@ -42,7 +42,7 @@ class Client(threading.Thread):
     def close(self):
         msg='disconnect'
         self.__socketC.send(msg.encode())
-        reponse = self.__socketC.recv(32000).decode()
+        reponse = self.__socketC.recv(320000).decode()
         return reponse
 
 
@@ -124,6 +124,10 @@ class MainWindow(QMainWindow):
             msg.setText("Les valeurs de l'adresse ip et du port sont incorrectes ou le serveur n'est pas allumé")
             msg.exec_()
         else:
+            msg = QMessageBox()
+            msg.setWindowTitle("Connexion à un server réussi")
+            msg.setText("Vous etes connecté au serveur")
+            msg.exec_()
             self.co.setEnabled(False)
             self.q.setEnabled(True)
             self.s.setEnabled(True)
@@ -179,11 +183,13 @@ class MainWindow(QMainWindow):
             msg.exec_()
 
         else:
+
             msg = QMessageBox()
             msg.setWindowTitle("Ajout d'une addrese Ip")
             msg.setText("L'adresse a été correctement ajouté ")
             msg.exec_()
             self.newip.clear()
+
 
 
     def lirefichiercsv(self):
