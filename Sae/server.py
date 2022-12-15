@@ -121,6 +121,8 @@ def discussion(conn):
                     reply="Commande non interprété du à des fautes d'orthographes ou non existante "
                     conn.send(reply.encode())
                 else:
+                    if reply == "":
+                        reply = "Commande exécuté et réussi "
                     conn.send(reply.encode())
             else:
                 reply = "Commande non interprété du à des fautes d'orthographes ou non existante "
