@@ -172,7 +172,6 @@ class MainWindow(QMainWindow):
             msg.setText("L'adresse a été correctement ajouté")
             msg.exec_()
         else:
-
             msg = QMessageBox()
             msg.setWindowTitle("Ajout d'une addrese Ip")
             msg.setText("L'adresse a été correctement ajouté ")
